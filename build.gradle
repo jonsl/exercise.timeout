@@ -1,0 +1,30 @@
+apply plugin: 'application'
+apply plugin: 'java'
+
+group 'com.exercise.timeout'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.4' //version required
+}
+
+// Set our project variables
+project.ext {
+    junitVersion = '4.4'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: junitVersion
+}
+
+sourceSets {
+    main.java.srcDirs = ['src/main/java']
+    main.resources.srcDirs = ['src/main/resources']
+}
