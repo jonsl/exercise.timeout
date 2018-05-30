@@ -15,19 +15,19 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.assertEquals;
 
 /**
- * payment representation tests: {@link Member}
+ * tests for member json validity: {@link Member}
  */
 
 public class MemberTests {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    private static final String TEST_MEMBER_JSON_FILE_NAME_1 = "validMember_1.json";
-    private static final String TEST_MEMBER_JSON_FILE_NAME_2 = "validMember_2.json";
+    private static final String TEST_MEMBER_JSON_FILE_NAME_1 = "valid_member_1.json";
+    private static final String TEST_MEMBER_JSON_FILE_NAME_2 = "valid_member_2.json";
 
     // no need for @Before or @BeforeClass
 
-    private static Member getValidMemberPrefernce_1() {
+    private static Member getValidMember_1() {
         return new Member(
                 "John Davis",
                 Collections.singletonList("Fish"),
@@ -35,7 +35,7 @@ public class MemberTests {
         );
     }
 
-    private static Member getValidMemberPrefernce_2() {
+    private static Member getValidMember_2() {
         return new Member(
                 "Gavin Coulson",
                 Collections.emptyList(),
@@ -45,31 +45,31 @@ public class MemberTests {
 
     @Test
     public void serializesToJson_1() throws Exception {
-        String fileJson = readTestResourceJsonFile(TEST_MEMBER_JSON_FILE_NAME_1);
-        assertEquals(fileJson, MAPPER.writeValueAsString(getValidMemberPrefernce_1()));
+        String fileJson = readTestMemberJsonFile(TEST_MEMBER_JSON_FILE_NAME_1);
+        assertEquals(fileJson, MAPPER.writeValueAsString(getValidMember_1()));
     }
 
     @Test
     public void deserializesFromJson_1() throws Exception {
-        String fileJson = readTestResourceJsonFile(TEST_MEMBER_JSON_FILE_NAME_1);
-        assertEquals(MAPPER.readValue(fileJson, Member.class), getValidMemberPrefernce_1());
+        String fileJson = readTestMemberJsonFile(TEST_MEMBER_JSON_FILE_NAME_1);
+        assertEquals(MAPPER.readValue(fileJson, Member.class), getValidMember_1());
     }
 
     @Test
     public void serializesToJson_2() throws Exception {
-        String fileJson = readTestResourceJsonFile(TEST_MEMBER_JSON_FILE_NAME_2);
-        assertEquals(fileJson, MAPPER.writeValueAsString(getValidMemberPrefernce_2()));
+        String fileJson = readTestMemberJsonFile(TEST_MEMBER_JSON_FILE_NAME_2);
+        assertEquals(fileJson, MAPPER.writeValueAsString(getValidMember_2()));
     }
 
     @Test
     public void deserializesFromJson_2() throws Exception {
-        String fileJson = readTestResourceJsonFile(TEST_MEMBER_JSON_FILE_NAME_2);
-        assertEquals(MAPPER.readValue(fileJson, Member.class), getValidMemberPrefernce_2());
+        String fileJson = readTestMemberJsonFile(TEST_MEMBER_JSON_FILE_NAME_2);
+        assertEquals(MAPPER.readValue(fileJson, Member.class), getValidMember_2());
     }
 
-    private String readTestResourceJsonFile(String fileName) throws Exception {
+    private String readTestMemberJsonFile(String fileName) throws Exception {
         // read test file
-        URI url = this.getClass().getResource("/" + fileName).toURI();
+        URI url = this.getClass().getResource("/members/" + fileName).toURI();
         Path path = Paths.get(url);
         String testFileContents = java.nio.file.Files.lines(path).collect(Collectors.joining());
         return MAPPER.readValue(testFileContents, JsonNode.class).toString();

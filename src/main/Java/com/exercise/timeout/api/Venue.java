@@ -11,29 +11,29 @@ import java.util.List;
  * uses Jackson to map to and from JSON
  */
 
-public class Member {
+public class Venue {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     @JsonProperty("name")
     private String name;
 
-    @JsonProperty("wont_eat")
-    private List<String> wontEat;
+    @JsonProperty("food")
+    private List<String> food;
 
     @JsonProperty("drinks")
     private List<String> drinks;
 
-    public Member() {
+    public Venue() {
         // Jackson deserialization
     }
 
     @JsonCreator
-    public Member(@JsonProperty("name") String name,
-                  @JsonProperty("wont_eat") List<String> wontEat,
-                  @JsonProperty("drinks") List<String> drinks) {
+    public Venue(@JsonProperty("name") String name,
+                 @JsonProperty("food") List<String> food,
+                 @JsonProperty("drinks") List<String> drinks) {
         this.name = name;
-        this.wontEat = wontEat;
+        this.food = food;
         this.drinks = drinks;
     }
 
@@ -60,8 +60,8 @@ public class Member {
         return name;
     }
 
-    public List<String> getWontEat() {
-        return wontEat;
+    public List<String> getFood() {
+        return food;
     }
 
     public List<String> getDrinks() {
@@ -71,12 +71,12 @@ public class Member {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Member)) return false;
+        if (!(o instanceof Venue)) return false;
 
-        Member that = (Member) o;
+        Venue that = (Venue) o;
 
         if (!getName().equals(that.getName())) return false;
-        if (!getWontEat().equals(that.getWontEat())) return false;
+        if (!getFood().equals(that.getFood())) return false;
         return getDrinks().equals(that.getDrinks());
     }
 }
