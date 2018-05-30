@@ -20,18 +20,20 @@ public class JsonFeeds {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    private static final String USERS_FILE_NAME = "users.json";
-    private static final String VENUES_FILE_NAME = "venues.json";
-
+    private String userJson;
+    private String venuesJson;
     private List<Member> memberList;
     private Map<String, Member> memberMap = new HashMap<String, Member>();
     private List<Venue> venueList;
 
-    public JsonFeeds() throws Exception {
+    public JsonFeeds(String userJson, String venuesJson) throws Exception {
+
+        this.userJson = userJson;
+        this.venuesJson = venuesJson;
 
         ObjectMapper objectMapper = MAPPER.configure(JsonParser.Feature.ALLOW_TRAILING_COMMA, true);
 
-        String usersResourceContent = readResourceFileContents("users.json");
+        String usersResourceContent = readResourceFileContents(this.userJson);
         try {
             memberList = objectMapper.readValue(usersResourceContent, new TypeReference<List<Member>>() {
             });
@@ -45,7 +47,7 @@ public class JsonFeeds {
             System.err.println("JsonMappingException: " + e.getMessage());
         }
 
-        String venuesResourceContent = readResourceFileContents("venues.json");
+        String venuesResourceContent = readResourceFileContents(this.venuesJson);
         try {
             venueList = objectMapper.readValue(venuesResourceContent, new TypeReference<List<Venue>>() {
             });

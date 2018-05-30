@@ -8,10 +8,13 @@ import java.util.*;
 
 public class MemberVenueApp {
 
+    private static final String USERS_FILE_NAME = "users.json";
+    private static final String VENUES_FILE_NAME = "venues.json";
+
     public static void main(String[] args) {
 
         try {
-            JsonFeeds jsonFeeds = new JsonFeeds();
+            JsonFeeds jsonFeeds = new JsonFeeds(USERS_FILE_NAME, VENUES_FILE_NAME);
 
             // start with everything in places to go
             // and remove depending on who cant eat
