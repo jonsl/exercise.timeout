@@ -87,13 +87,12 @@ public class SocialManager {
             if (member != null) {
 
                 for (String wontEatItem : member.getWontEat()) {
+                    boolean canEat = true;
+
                     for (Venue venue : getVenueList()) {
-
-                        boolean canEat = false;
-
                         for (String food : venue.getFood()) {
-                            if (!food.equals(wontEatItem)) {
-                                canEat = true;
+                            if (food.equals(wontEatItem)) {
+                                canEat = false;
                                 break;
                             }
                         }
@@ -105,19 +104,19 @@ public class SocialManager {
                             values.add(name);
 
                             fixture.getGoVenueSet().remove(venue);
+
+                            canEat = true;
                         }
                     }
                 }
 
                 for (String willDrinkItem : member.getDrinks()) {
+                    boolean canDrink = false;
+
                     for (Venue venue : getVenueList()) {
-
-                        boolean canDrink = true;
-
                         for (String drink : venue.getDrinks()) {
                             if (drink.equals(willDrinkItem)) {
-                                canDrink = false;
-                                break;
+                                canDrink = true;
                             }
                         }
 
@@ -128,6 +127,8 @@ public class SocialManager {
                             values.add(name);
 
                             fixture.getGoVenueSet().remove(venue);
+
+                            canDrink = true;
                         }
                     }
                 }
