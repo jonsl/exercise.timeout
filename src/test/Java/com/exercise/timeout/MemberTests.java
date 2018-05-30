@@ -39,25 +39,25 @@ public class MemberTests {
 
     @Test
     public void serializesToJson_1() throws Exception {
-        String fileJson = TestUtils.readTestResoucesFileContents(this, TEST_MEMBER_JSON_FILE_NAME_1);
+        String fileJson = TestUtils.readTestResoucesFileContents(MAPPER, this, TEST_MEMBER_JSON_FILE_NAME_1);
         assertEquals(fileJson, MAPPER.writeValueAsString(getValidMember_1()));
     }
 
     @Test
     public void deserializesFromJson_1() throws Exception {
-        String fileJson = TestUtils.readTestResoucesFileContents(this, TEST_MEMBER_JSON_FILE_NAME_1);
+        String fileJson = TestUtils.readTestResoucesFileContents(MAPPER, this, TEST_MEMBER_JSON_FILE_NAME_1);
         assertEquals(MAPPER.readValue(fileJson, Member.class), getValidMember_1());
     }
 
     @Test
     public void serializesToJson_2() throws Exception {
-        String fileJson = TestUtils.readTestResoucesFileContents(this, TEST_MEMBER_JSON_FILE_NAME_2);
+        String fileJson = TestUtils.readTestResoucesFileContents(MAPPER, this, TEST_MEMBER_JSON_FILE_NAME_2);
         assertEquals(fileJson, MAPPER.writeValueAsString(getValidMember_2()));
     }
 
     @Test
     public void deserializesFromJson_2() throws Exception {
-        String fileJson = TestUtils.readTestResoucesFileContents(this, TEST_MEMBER_JSON_FILE_NAME_2);
+        String fileJson = TestUtils.readTestResoucesFileContents(MAPPER, this, TEST_MEMBER_JSON_FILE_NAME_2);
         assertEquals(MAPPER.readValue(fileJson, Member.class), getValidMember_2());
     }
 }

@@ -13,6 +13,7 @@ task wrapper(type: Wrapper) {
 
 // Set our project variables
 project.ext {
+    jacksonVersion = '2.9.5'
     junitVersion = '4.4'
 }
 
@@ -22,7 +23,9 @@ repositories {
 
 dependencies {
 // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.5'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonVersion
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
+//    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: jacksonVersion
     testCompile group: 'junit', name: 'junit', version: junitVersion
 }
 
