@@ -11,7 +11,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class JsonFeeds {
@@ -22,6 +24,7 @@ public class JsonFeeds {
     private static final String VENUES_FILE_NAME = "venues.json";
 
     private List<Member> memberList;
+    private Map<String, Member> memberMap = new HashMap<String, Member>();
     private List<Venue> venueList;
 
     public JsonFeeds() throws Exception {
@@ -32,6 +35,12 @@ public class JsonFeeds {
         try {
             memberList = objectMapper.readValue(usersResourceContent, new TypeReference<List<Member>>() {
             });
+
+            // create memberMap on name
+            for (Member member : memberList) {
+                memberMap.put(member.getName(), member);
+            }
+
         } catch (JsonMappingException e) {
             System.err.println("JsonMappingException: " + e.getMessage());
         }
@@ -47,6 +56,13 @@ public class JsonFeeds {
 
     public List<Member> getMemberList() {
         return memberList;
+    }
+
+    public Member getMember(String name) {
+        if (memberMap.containsKey(name)) {
+            return memberMap.get(name);
+        }
+        return null;
     }
 
     public List<Venue> getVenueList() {
