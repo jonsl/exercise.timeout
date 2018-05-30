@@ -21,10 +21,14 @@ repositories {
 }
 
 dependencies {
+// https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.5'
     testCompile group: 'junit', name: 'junit', version: junitVersion
 }
 
 sourceSets {
-    main.java.srcDirs = ['src/main/java']
+    main.java.srcDirs = ['src/main/Java']
     main.resources.srcDirs = ['src/main/resources']
+    test.java.srcDirs = ['src/test/Java']
+    test.resources.srcDirs = ['src/test/resources']
 }
