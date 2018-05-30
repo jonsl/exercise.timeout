@@ -94,6 +94,7 @@ public class SocialManager {
                         for (String food : venue.getFood()) {
                             if (!food.equals(wontEatItem)) {
                                 canEat = true;
+                                break;
                             }
                         }
 
@@ -111,11 +112,12 @@ public class SocialManager {
                 for (String willDrinkItem : member.getDrinks()) {
                     for (Venue venue : getVenueList()) {
 
-                        boolean canDrink = false;
+                        boolean canDrink = true;
 
                         for (String drink : venue.getDrinks()) {
                             if (drink.equals(willDrinkItem)) {
-                                canDrink = true;
+                                canDrink = false;
+                                break;
                             }
                         }
 
