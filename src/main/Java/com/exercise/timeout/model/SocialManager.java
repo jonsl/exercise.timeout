@@ -18,6 +18,8 @@ public class SocialManager {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
+    private Fixture fixture;
+
     private String userJson;
     private String venuesJson;
 
@@ -72,54 +74,57 @@ public class SocialManager {
 
     public Fixture getFixtures(String[] names) {
 
-        Fixture fixture = new Fixture(getVenueList());
+        fixture = new Fixture(getVenueList());
 
         for (String name : names) {
 
-            // arg is (hopefully) a name
             Member member = getMember(name);
 
             if (member != null) {
 
-                for (String wontEatItem : member.getWontEat()) {
-                    for (Venue venue : getVenueList()) {
-                        boolean canEat = false;
-                        for (String food : venue.getFood()) {
-                            if (!food.equals(wontEatItem)) {
-                                canEat = true;
-                                break;
-                            }
-                        }
+                for (Venue venue : getVenueList()) {
 
-                        if (!canEat) {
-                            // we cant eat here
-                            Set<String> values = fixture.getAvoidEatMap().computeIfAbsent(venue.getName(), k -> new HashSet<String>());
-                            values.add(name);
-                        }
-                    }
-                }
+                    // check if can eat here
 
-                for (String willDrinkItem : member.getDrinks()) {
-                    for (Venue venue : getVenueList()) {
-                        boolean canDrink = false;
-                        for (String drink : venue.getDrinks()) {
-                            if (drink.equals(willDrinkItem)) {
-                                canDrink = true;
-                                break;
-                            }
-                        }
+                    checkAddAvoidEatAtVenue(member, venue);
 
-                        if (canDrink) {
-                            // we can drink here
-                            Set<String> values = fixture.getCanDrinkMap().computeIfAbsent(venue.getName(), k -> new HashSet<String>());
-                            values.add(name);
-                        }
-                    }
+                    // check if can drink here
+
+                    checkAddAvoidDrinkAtVenue(member, venue);
                 }
             }
         }
 
         return fixture;
+    }
+
+    private void checkAddAvoidEatAtVenue(Member member, Venue venue) {
+
+        for (String wontEatItem : member.getWontEat()) {
+            for (String food : venue.getFood()) {
+                if (!food.toUpperCase().equals(wontEatItem.toUpperCase())) {
+                    return;
+                }
+            }
+        }
+
+        // we cant eat here
+        Set<String> values = fixture.getAvoidEatMap().computeIfAbsent(venue.getName(), k -> new HashSet<String>());
+        values.add(member.getName());
+    }
+
+    private void checkAddAvoidDrinkAtVenue(Member member, Venue venue) {
+        for (String willDrinkItem : member.getDrinks()) {
+            for (String drink : venue.getDrinks()) {
+                if (drink.toUpperCase().equals(willDrinkItem.toUpperCase())) {
+                    return;
+                }
+            }
+        }
+
+        // we cant drink here
+        Set<String> values = fixture.getAvoidDrinkMap().computeIfAbsent(venue.getName(), k -> new HashSet<String>());
+        values.add(member.getName());
     }
 
     private String readResourceFileContents(String fileName) throws Exception {
