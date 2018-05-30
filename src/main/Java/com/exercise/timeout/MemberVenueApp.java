@@ -1,8 +1,11 @@
 package com.exercise.timeout;
 
+import com.exercise.timeout.api.Member;
 import com.exercise.timeout.api.Venue;
 import com.exercise.timeout.model.Fixture;
 import com.exercise.timeout.model.SocialManager;
+
+import java.util.Set;
 
 public class MemberVenueApp {
 
@@ -17,24 +20,31 @@ public class MemberVenueApp {
             Fixture fixture = socialManager.getFixtures(args);
 
             System.out.println("Places to go:");
-            for (Venue venue : fixture.getGoVenueSet()) {
-                System.out.println("\t" + venue.getName());
+            for (Venue venue : socialManager.getVenueList()) {
+                if (fixture.getAvoidEatMap().get(venue.getName()) == null
+                        && fixture.getCanDrinkMap().get(venue.getName()) != null) {
+                    System.out.println("\t" + venue.getName());
+                }
             }
             System.out.println("Places to avoid:");
-            for (Venue venue : fixture.getAvoidVenueSet()) {
-                System.out.println("\t" + venue.getName());
-                if (fixture.getAvoidEatMap().get(venue.getName()) != null) {
-                    for (String name : fixture.getAvoidEatMap().get(venue.getName())) {
-                        System.out.println("\t\tThere is nothing for " + name + " to eat");
-                    }
+            for (Venue venue : socialManager.getVenueList()) {
+                Set<String> avoidEatNameSet = fixture.getAvoidEatMap().get(venue.getName());
+                Set<String> canDrinkNameSet = fixture.getCanDrinkMap().get(venue.getName());
+                if (avoidEatNameSet != null && canDrinkNameSet == null) {
+                    System.out.println("\t" + venue.getName());
                 }
-                if (fixture.getAvoidDrinkMap().get(venue.getName()) != null) {
-                    for (String name : fixture.getAvoidDrinkMap().get(venue.getName())) {
-                        System.out.println("\t\tThere is nothing for " + name + " to drink");
+                for (String name : args) {
+                    if (avoidEatNameSet != null) {
+                        if (avoidEatNameSet.contains(name)) {
+                            System.out.println("\t\tThere is nothing for " + name + " to eat");
+                        }
+                    }
+                    if (canDrinkNameSet != null) {
+                        if (!canDrinkNameSet.contains(name))
+                            System.out.println("\t\tThere is nothing for " + name + " to drink");
                     }
                 }
             }
-
         } catch (Exception e) {
             System.err.println("IOException: " + e.getMessage());
         }

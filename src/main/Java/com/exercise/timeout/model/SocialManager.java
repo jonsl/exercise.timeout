@@ -21,14 +21,9 @@ public class SocialManager {
     private String userJson;
     private String venuesJson;
 
-    private Fixture fixture;
-
     private List<Member> memberList;
     private Map<String, Member> memberMap = new HashMap<String, Member>();
     private List<Venue> venueList;
-    // start with everything in places to go
-    // and remove depending on who cant eat
-
 
     public SocialManager(String userJson, String venuesJson) throws Exception {
 
@@ -87,9 +82,8 @@ public class SocialManager {
             if (member != null) {
 
                 for (String wontEatItem : member.getWontEat()) {
-                    boolean canEat = true;
-
                     for (Venue venue : getVenueList()) {
+                        boolean canEat = true;
                         for (String food : venue.getFood()) {
                             if (food.equals(wontEatItem)) {
                                 canEat = false;
@@ -98,37 +92,27 @@ public class SocialManager {
                         }
 
                         if (!canEat) {
-                            // we cant go here
-                            fixture.getAvoidVenueSet().add(venue);
+                            // we cant eat here
                             Set<String> values = fixture.getAvoidEatMap().computeIfAbsent(venue.getName(), k -> new HashSet<String>());
                             values.add(name);
-
-                            fixture.getGoVenueSet().remove(venue);
-
-                            canEat = true;
                         }
                     }
                 }
 
                 for (String willDrinkItem : member.getDrinks()) {
-                    boolean canDrink = false;
-
                     for (Venue venue : getVenueList()) {
+                        boolean canDrink = false;
                         for (String drink : venue.getDrinks()) {
                             if (drink.equals(willDrinkItem)) {
                                 canDrink = true;
+                                break;
                             }
                         }
 
-                        if (!canDrink) {
-                            // we cant go here
-                            fixture.getAvoidVenueSet().add(venue);
-                            Set<String> values = fixture.getAvoidDrinkMap().computeIfAbsent(venue.getName(), k -> new HashSet<String>());
+                        if (canDrink) {
+                            // we can drink here
+                            Set<String> values = fixture.getCanDrinkMap().computeIfAbsent(venue.getName(), k -> new HashSet<String>());
                             values.add(name);
-
-                            fixture.getGoVenueSet().remove(venue);
-
-                            canDrink = true;
                         }
                     }
                 }
