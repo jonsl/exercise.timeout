@@ -83,10 +83,10 @@ public class SocialManager {
 
                 for (String wontEatItem : member.getWontEat()) {
                     for (Venue venue : getVenueList()) {
-                        boolean canEat = true;
+                        boolean canEat = false;
                         for (String food : venue.getFood()) {
-                            if (food.equals(wontEatItem)) {
-                                canEat = false;
+                            if (!food.equals(wontEatItem)) {
+                                canEat = true;
                                 break;
                             }
                         }

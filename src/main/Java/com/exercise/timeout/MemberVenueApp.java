@@ -30,7 +30,7 @@ public class MemberVenueApp {
             for (Venue venue : socialManager.getVenueList()) {
                 Set<String> avoidEatNameSet = fixture.getAvoidEatMap().get(venue.getName());
                 Set<String> canDrinkNameSet = fixture.getCanDrinkMap().get(venue.getName());
-                if (avoidEatNameSet != null && canDrinkNameSet == null) {
+                if (avoidEatNameSet != null || canDrinkNameSet == null) {
                     System.out.println("\t" + venue.getName());
                 }
                 for (String name : args) {
