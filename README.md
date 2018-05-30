@@ -48,7 +48,7 @@ $ sudo apt install gradle
 $ git clone https://github.com/jonsl/exercise.form3.git
 $ cd exercise.form3/
 $ ./gradlew build
-$ ./gradlew run
+$ ./gradlew run -PappArgs="['Robert Webb', 'Alan Allen']" // eg
 ```
 ### windows
 ```

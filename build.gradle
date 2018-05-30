@@ -1,6 +1,8 @@
 apply plugin: 'application'
 apply plugin: 'java'
 
+mainClassName = "com.exercise.timeout.MemberVenueApp"
+
 group 'com.exercise.timeout'
 version '1.0-SNAPSHOT'
 
@@ -32,4 +34,10 @@ sourceSets {
     main.resources.srcDirs = ['src/main/resources']
     test.java.srcDirs = ['src/test/Java']
     test.resources.srcDirs = ['src/test/resources']
+}
+
+run {
+    if (project.hasProperty("appArgs")) {
+        args Eval.me(appArgs)
+    }
 }
