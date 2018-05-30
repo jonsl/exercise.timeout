@@ -1,10 +1,8 @@
 package com.exercise.timeout;
 
-import com.exercise.timeout.api.Member;
 import com.exercise.timeout.api.Venue;
-import com.exercise.timeout.model.JsonFeeds;
-
-import java.util.*;
+import com.exercise.timeout.model.Fixture;
+import com.exercise.timeout.model.SocialManager;
 
 public class MemberVenueApp {
 
@@ -14,83 +12,24 @@ public class MemberVenueApp {
     public static void main(String[] args) {
 
         try {
-            JsonFeeds jsonFeeds = new JsonFeeds(USERS_FILE_NAME, VENUES_FILE_NAME);
+            SocialManager socialManager = new SocialManager(USERS_FILE_NAME, VENUES_FILE_NAME);
 
-            // start with everything in places to go
-            // and remove depending on who cant eat
-            Set<Venue> goVenueSet = new HashSet<Venue>(jsonFeeds.getVenueList());
-            Set<Venue> avoidVenueSet = new HashSet<Venue>();
-
-            Map<String/*venue name*/, Set<String/*member names*/>> avoidEatMap = new HashMap<String, Set<String>>();
-            Map<String/*venue name*/, Set<String/*member names*/>> avoidDrinkMap = new HashMap<String, Set<String>>();
-
-            for (String name : args) {
-
-                // arg is (hopefully) a name
-                Member member = jsonFeeds.getMember(name);
-
-                if (member != null) {
-
-                    for (String wontEatItem : member.getWontEat()) {
-                        for (Venue venue : jsonFeeds.getVenueList()) {
-
-                            boolean canEat = false;
-
-                            for (String food : venue.getFood()) {
-                                if (!food.equals(wontEatItem)) {
-                                    canEat = true;
-                                }
-                            }
-
-                            if (!canEat) {
-                                // we cant go here
-                                avoidVenueSet.add(venue);
-                                Set<String> values = avoidEatMap.computeIfAbsent(venue.getName(), k -> new HashSet<String>());
-                                values.add(name);
-
-                                goVenueSet.remove(venue);
-                            }
-                        }
-                    }
-
-                    for (String willDrinkItem : member.getDrinks()) {
-                        for (Venue venue : jsonFeeds.getVenueList()) {
-
-                            boolean canDrink = false;
-
-                            for (String drink : venue.getDrinks()) {
-                                if (drink.equals(willDrinkItem)) {
-                                    canDrink = true;
-                                }
-                            }
-
-                            if (!canDrink) {
-                                // we cant go here
-                                avoidVenueSet.add(venue);
-                                Set<String> values = avoidDrinkMap.computeIfAbsent(venue.getName(), k -> new HashSet<String>());
-                                values.add(name);
-
-                                goVenueSet.remove(venue);
-                            }
-                        }
-                    }
-                }
-            }
+            Fixture fixture = socialManager.getFixtures(args);
 
             System.out.println("Places to go:");
-            for (Venue venue : goVenueSet) {
+            for (Venue venue : fixture.getGoVenueSet()) {
                 System.out.println("\t" + venue.getName());
             }
             System.out.println("Places to avoid:");
-            for (Venue venue : avoidVenueSet) {
+            for (Venue venue : fixture.getAvoidVenueSet()) {
                 System.out.println("\t" + venue.getName());
-                if (avoidEatMap.get(venue.getName()) != null) {
-                    for (String name : avoidEatMap.get(venue.getName())) {
+                if (fixture.getAvoidEatMap().get(venue.getName()) != null) {
+                    for (String name : fixture.getAvoidEatMap().get(venue.getName())) {
                         System.out.println("\t\tThere is nothing for " + name + " to eat");
                     }
                 }
-                if (avoidDrinkMap.get(venue.getName()) != null) {
-                    for (String name : avoidDrinkMap.get(venue.getName())) {
+                if (fixture.getAvoidDrinkMap().get(venue.getName()) != null) {
+                    for (String name : fixture.getAvoidDrinkMap().get(venue.getName())) {
                         System.out.println("\t\tThere is nothing for " + name + " to drink");
                     }
                 }
